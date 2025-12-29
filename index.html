@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio | Anshu Pulipati</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-0: #070a12;
+        --bg-1: #0b1630;
+
+        --surface: rgba(255, 255, 255, 0.06);
+        --surface-2: rgba(255, 255, 255, 0.08);
+        --card: rgba(8, 12, 22, 0.55);
+
+        --border: rgba(255, 255, 255, 0.12);
+        --border-2: rgba(255, 255, 255, 0.16);
+
+        --text: rgba(255, 255, 255, 0.94);
+        --muted: rgba(255, 255, 255, 0.68);
+        --muted-2: rgba(255, 255, 255, 0.58);
+
+        --accent: #22d3ee;
+        --accent-2: #7c3aed;
+
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+
+        --radius: 22px;
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      /* -----------------------------
+         Option A: Hover/Focus "Peek" Expand (no button)
+      ----------------------------- */
+      .item.exp-peek {
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+      }
+
+      /* collapsed state */
+      .item.exp-peek .bullets {
+        max-height: 95px; /* ~3 bullets worth, adjust if needed */
+        overflow: hidden;
+        position: relative;
+        transition: max-height 360ms var(--ease);
+        padding-bottom: 10px; /* space for fade */
+      }
+
+      /* fade + hint */
+      .item.exp-peek .bullets::after {
+        content: "More…";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        padding: 18px 0 2px;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--muted);
+
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(0, 0, 0, 0.65)
+        );
+      }
+
+      /* expanded on hover/focus (desktop) or tap toggle (.is-open on mobile) */
+      .item.exp-peek:hover .bullets,
+      .item.exp-peek:focus-within .bullets,
+      .item.exp-peek.is-open .bullets {
+        max-height: 540px; /* big enough for long lists */
+      }
+
+      /* hide fade when expanded */
+      .item.exp-peek:hover .bullets::after,
+      .item.exp-peek:focus-within .bullets::after,
+      .item.exp-peek.is-open .bullets::after {
+        opacity: 0;
+        transition: opacity 160ms var(--ease);
+      }
+
+      /* keyboard accessibility */
+      .item.exp-peek:focus-within {
+        outline: 2px solid rgba(34, 211, 238, 0.35);
+        outline-offset: 3px;
+        border-radius: 16px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .item.exp-peek .bullets {
+          transition: none;
+        }
+      }
+
+      /* Optional: make Work History scroll inside the panel */
+      #panel-experience .card:first-child {
+        max-height: calc(100% - 12px);
+        overflow: auto;
+      }
+
+      /* Smooth scroll look */
+      #panel-experience .card:first-child::-webkit-scrollbar {
+        width: 10px;
+      }
+      #panel-experience .card:first-child::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+      #panel-experience .card:first-child::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI,
+          Roboto, Helvetica, Arial;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--text);
+
+        background: radial-gradient(
+            1100px 700px at 18% 12%,
+            rgba(34, 211, 238, 0.16),
+            transparent 62%
+          ),
+          radial-gradient(
+            1100px 700px at 76% 18%,
+            rgba(124, 58, 237, 0.18),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 700px at 55% 88%,
+            rgba(34, 211, 238, 0.1),
+            transparent 65%
+          ),
+          linear-gradient(140deg, var(--bg-0) 0%, var(--bg-1) 60%, #070819 100%);
+      }
+
+      h1,
+      h2,
+      h3,
+      .brand-title {
+        font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .app {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        gap: 18px;
+        padding: 18px;
+      }
+
+      .sidebar {
+        height: calc(100vh - 36px);
+        border-radius: var(--radius);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.08),
+          rgba(255, 255, 255, 0.05)
+        );
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .sidebar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.14),
+          rgba(255, 255, 255, 0.02)
+        );
+        opacity: 0.65;
+        pointer-events: none;
+      }
+
+      .sidebar-inner {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        gap: 14px;
+      }
+
+      .brandRow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .brand {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(34, 211, 238, 0.45),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 70% 70%,
+            rgba(124, 58, 237, 0.42),
+            transparent 55%
+          ),
+          rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border);
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.35);
+        display: grid;
+        place-items: center;
+        user-select: none;
+        flex: 0 0 auto;
+      }
+
+      .brand-title {
+        font-size: 12px;
+        font-weight: 800;
+        opacity: 0.95;
+        letter-spacing: 0.04em;
+      }
+
+      .brandText {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .brandName {
+        font-weight: 800;
+        font-size: 14px;
+        letter-spacing: -0.01em;
+      }
+      .brandRole {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 2px;
+      }
+
+      .nav button {
+        appearance: none;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 16px;
+
+        background: rgba(0, 0, 0, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--text);
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        transition: transform 240ms var(--ease), background 240ms var(--ease),
+          border-color 240ms var(--ease), box-shadow 240ms var(--ease);
+      }
+
+      .nav button:hover {
+        transform: translateY(-1px);
+        background: rgba(0, 0, 0, 0.24);
+        border-color: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+      }
+
+      .nav button .icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        font-size: 16px;
+        flex: 0 0 auto;
+      }
+
+      .nav button .textBlock {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+
+      .nav button .label {
+        position: static;
+        opacity: 1;
+        transform: none;
+        background: none;
+        border: 0;
+        padding: 0;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      .nav button .sublabel {
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .nav button.active {
+        background: linear-gradient(
+          135deg,
+          rgba(34, 211, 238, 0.16),
+          rgba(124, 58, 237, 0.12)
+        );
+        border-color: rgba(34, 211, 238, 0.32);
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.12),
+          0 18px 36px rgba(34, 211, 238, 0.12);
+      }
+
+      .nav button.active .icon {
+        border-color: rgba(34, 211, 238, 0.35);
+        box-shadow: 0 0 18px rgba(34, 211, 238, 0.18);
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 10px;
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .status {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .statusTitle {
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .statusText {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+        flex: 0 0 auto;
+      }
+
+      .panel-shell {
+        height: calc(100vh - 36px);
+        border-radius: var(--radius);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .panel-shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+        opacity: 0.05;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+
+      .content {
+        height: 100%;
+        padding: 22px;
+        position: relative;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        margin-bottom: 16px;
+      }
+
+      .headline {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .topbar h1 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .topbar p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        white-space: nowrap;
+      }
+
+      .btn {
+        padding: 9px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        background: rgba(34, 211, 238, 0.12);
+        color: var(--text);
+        transition: transform 220ms var(--ease), background 220ms var(--ease),
+          box-shadow 220ms var(--ease);
+        white-space: nowrap;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(34, 211, 238, 0.18);
+        box-shadow: 0 12px 28px rgba(34, 211, 238, 0.12);
+      }
+
+      .panel-area {
+        height: calc(100% - 76px);
+        position: relative;
+      }
+
+      .panel {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: 1.25fr 0.85fr;
+        gap: 16px;
+
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+        pointer-events: none;
+
+        transition: opacity 260ms var(--ease), transform 360ms var(--ease);
+      }
+
+      .panel.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      @media (max-width: 980px) {
+        body {
+          overflow: auto;
+        }
+        .app {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          height: auto;
+        }
+        .panel-shell {
+          height: auto;
+        }
+        .panel-area {
+          height: auto;
+        }
+        .panel {
+          position: static;
+          opacity: 1;
+          transform: none;
+          pointer-events: auto;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          margin-top: 16px;
+        }
+        .chip {
+          display: none;
+        }
+      }
+
+      .card {
+        border-radius: var(--radius);
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+        padding: 18px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          900px 320px at 10% 10%,
+          rgba(34, 211, 238, 0.12),
+          transparent 60%
+        );
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      .card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .section-title {
+        font-size: 12px;
+        color: var(--muted-2);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 12px;
+      }
+
+      .kpi .big {
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      .kpi .small {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .item {
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: baseline;
+      }
+      .role-title {
+        font-weight: 800;
+        font-size: 13px;
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .bullets {
+        margin: 10px 0 0;
+        padding-left: 16px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+      }
+
+      .tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag {
+        font-size: 12px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .panel {
+          transition: none;
+        }
+        .nav button {
+          transition: none;
+        }
+      }
+
+            /* Scroll only the Highlights content (not the title) */
+      #panel-experience .scroll-area {
+        max-height: 500px;         /* adjust as you like */
+        overflow: auto;
+        padding-right: 6px;        /* room for scrollbar */
+      }
+
+      /* Optional: smooth scrollbar look (matches your existing style) */
+      #panel-experience .scroll-area::-webkit-scrollbar {
+        width: 10px;
+      }
+      #panel-experience .scroll-area::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+      }
+      #panel-experience .scroll-area::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-inner">
+          <div class="brandRow">
+            <div class="brand" title="Anshu Pulipati">
+              <span class="brand-title">AP</span>
+            </div>
+            <div class="brandText">
+              <div class="brandName">Anshu Pulipati</div>
+              <div class="brandRole">Data Analyst</div>
+            </div>
+          </div>
+
+          <div class="nav" role="navigation" aria-label="Portfolio sections">
+            <button class="active" data-target="about" type="button">
+              <span class="icon">👋</span>
+              <span class="textBlock">
+                <span class="label">About</span>
+                <span class="sublabel">Summary & strengths</span>
+              </span>
+            </button>
+
+            <button data-target="experience" type="button">
+              <span class="icon">💼</span>
+              <span class="textBlock">
+                <span class="label">Experience</span>
+                <span class="sublabel">Impact & outcomes</span>
+              </span>
+            </button>
+
+            <button data-target="projects" type="button">
+              <span class="icon">🧠</span>
+              <span class="textBlock">
+                <span class="label">Projects</span>
+                <span class="sublabel">Work samples</span>
+              </span>
+            </button>
+
+            <button data-target="skills" type="button">
+              <span class="icon">🧰</span>
+              <span class="textBlock">
+                <span class="label">Skills</span>
+                <span class="sublabel">Tools & methods</span>
+              </span>
+            </button>
+
+            <button data-target="education" type="button">
+              <span class="icon">🎓</span>
+              <span class="textBlock">
+                <span class="label">Education</span>
+                <span class="sublabel">Degrees & coursework</span>
+              </span>
+            </button>
+
+            <button data-target="contact" type="button">
+              <span class="icon">📩</span>
+              <span class="textBlock">
+                <span class="label">Contact</span>
+                <span class="sublabel">Email & LinkedIn</span>
+              </span>
+            </button>
+          </div>
+
+          <div class="sidebar-footer" title="Status">
+            <div class="status">
+              <div class="statusTitle">Status</div>
+              <div class="statusText">Open to roles</div>
+            </div>
+            <div class="dot"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT CONTENT -->
+      <section class="panel-shell">
+        <div class="content">
+          <div class="topbar">
+            <div class="headline">
+              <h1 id="panelTitle">About</h1>
+              <p id="panelSubtitle">Overview of focus and outcomes.</p>
+            </div>
+            <div class="actions">
+              <span class="chip" id="chip">Open to: Data Analyst · BI Analyst · Data Engineer</span>
+              <button class="btn" id="resumeBtn" type="button">
+                View Resume ↗
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-area">
+            <!-- ABOUT -->
+            <div
+              class="panel active"
+              id="panel-about"
+              data-title="About"
+              data-subtitle="Overview of focus and outcomes."
+            >
+              <div class="card">
+                <div class="section-title">Professional summary</div>
+                <p
+                  style="
+                    margin: 0;
+                    color: var(--muted);
+                    font-size: 13px;
+                    line-height: 1.7;
+                  "
+                >
+                Data Analyst with 2+ years of experience delivering enterprise analytics solutions
+                using SQL, Python, Power BI, Tableau, Excel, and cloud data warehouses. 
+                Experienced in building automated dashboards, optimizing queries, and developing 
+                scalable ETL workflows that improve reporting speed, accuracy, and decision-making. 
+                Strong collaborator with stakeholders to define KPIs, ensure data quality, 
+                and translate insights into measurable business impact.
+                </p>
+
+                <div style="height: 14px"></div>
+                <div class="section-title">Impact snapshot</div>
+                <div class="kpi-grid">
+                  <div class="kpi">
+                    <div class="big">40%</div>
+                    <div class="small">Reduced manual reporting</div>
+                  </div>
+                  <div class="kpi">
+                    <div class="big">20%</div>
+                    <div class="small">Improved data accuracy</div>
+                  </div>
+                  <div class="kpi">
+                    <div class="big">$1.2M</div>
+                    <div class="small">Revenue Recovery</div>
+                  </div>
+                </div>
+
+                <div style="height: 14px"></div>
+                <div class="section-title">Strengths</div>
+                <div class="tags">
+                  <span class="tag">KPI Dashboards</span>
+                  <span class="tag">SQL Optimization</span>
+                  <span class="tag">Data Quality & Validation</span>
+                  <span class="tag">ETL / ELT Pipelines</span>
+                  <span class="tag">Cloud Analytics (AWS/ Snowflake)</span>
+                  <span class="tag">Forecasting & Modeling</span>
+                </div>
+              </div>
+
+              <!-- ✅ Replace ONLY your "Quick profile" card with this block -->
+              <div class="card">
+                <div class="section-title">Quick profile</div>
+                <div class="list">
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Current</div>
+                      <div class="meta">HCL, USA · Data Analyst</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>Built Tableau/Power BI dashboards with automated refresh, drill-downs, and KPI scorecards to reduce manual reporting by <b>40%</b> and improve decision speed by <b>30%</b>.</li>
+                      <li>Improved reporting accuracy by <b>20%</b> using SQL + Python (Pandas) profiling/cleansing and Power Query validation (duplicates, nulls, schema mismatches).</li>
+                      <li>Developed Python ETL/ELT pipelines to integrate multi-source finance + customer data into Snowflake, reducing reporting latency by <b>35%</b>.</li>
+                    </ul>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Previously</div>
+                      <div class="meta">TCS, India · Data Analyst</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>Delivered cross-platform reporting and ETL workflows across Snowflake, AWS Redshift, and SQL Server for ERP/CRM/marketing data.</li>
+                      <li>Performed Python EDA to uncover revenue leakage and operational inefficiencies, enabling <b>$1.2M</b> revenue recovery for a key client.</li>
+                      <li>Built Excel models and Tableau KPI dashboards for cost, utilization, and delivery tracking, improving project efficiency by <b>15%</b>.</li>
+                    </ul>
+                  </div>
+                </div>
+             </div>
+            </div>
+
+            <!-- EXPERIENCE -->
+            <div
+              class="panel"
+              id="panel-experience"
+              data-title="Experience"
+              data-subtitle="Roles, measurable outcomes, and key contributions."
+            >
+              <div class="card">
+                <div class="section-title">Work history</div>
+                <div class="list">
+                  <!-- HCL -->
+                  <div class="item exp-peek" tabindex="0">
+                    <div class="row">
+                      <div class="role-title">Data Analyst · HCL (USA)</div>
+                      <div class="meta">09/2024 – Present</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>
+                        Reduced manual reporting by <b>40%</b> and improved executive decision-making by
+                        <b>30%</b> via Tableau/Power BI dashboards with automated refresh and KPI
+                        scorecards.
+                      </li>
+                      <li>
+                        Improved data accuracy by <b>20%</b> through profiling, cleansing, schema
+                        validation, and resolving duplicates/missing values using SQL, Python (Pandas),
+                        and Power Query.
+                      </li>
+                      <li>
+                        Reduced SQL execution time by <b>25%</b> by optimizing CTEs, stored procedures,
+                        and multi-table joins across Oracle and SQL Server.
+                      </li>
+                      <li>
+                        Improved reporting latency by <b>35%</b> by building Python ETL/ELT pipelines
+                        integrating finance and customer datasets into Snowflake.
+                      </li>
+                      <li>
+                        Boosted forecasting accuracy by <b>15%</b> using time-series forecasting,
+                        regression modeling, and churn prediction in Python/R.
+                      </li>
+                      <li>
+                        Saved <b>20+ hours/month</b> by automating weekly/monthly reporting using Python
+                        and Excel VBA; standardized templates and minimized manual work.
+                      </li>
+                      <li>
+                        Improved onboarding by <b>25%</b> via KPI definitions, data dictionaries,
+                        workflow diagrams, and reporting standards documentation.
+                      </li>
+                    </ul>
+                    <div class="tags">
+                      <span class="tag">Power BI</span>
+                      <span class="tag">Tableau</span>
+                      <span class="tag">SQL</span>
+                      <span class="tag">Python</span>
+                      <span class="tag">Snowflake</span>
+                      <span class="tag">Oracle</span>
+                      <span class="tag">SQL Server</span>
+                    </div>
+                  </div>
+
+                  <!-- TCS -->
+                  <div class="item exp-peek" tabindex="0">
+                    <div class="row">
+                      <div class="role-title">Data Analyst · TCS (India)</div>
+                      <div class="meta">01/2022 – 07/2023</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>
+                        Built and optimized ETL workflows with Python, integrating ERP/CRM data into
+                        Snowflake, Redshift, and SQL Server to improve data consistency and reporting.
+                      </li>
+                      <li>
+                        Improved project delivery efficiency by <b>15%</b> using Excel financial models
+                        and Tableau dashboards for KPIs, costs, and utilization.
+                      </li>
+                      <li>
+                        Identified revenue leakage and inefficiencies through Python EDA; recovered
+                        <b>$1.2M</b> for a key client.
+                      </li>
+                      <li>
+                        Optimized AWS Redshift pipelines to reduce refresh cycles from hours to minutes,
+                        enabling near-real-time reporting.
+                      </li>
+                      <li>
+                        Automated data validation checks using SQL triggers and Python scripts, reducing
+                        recurring quality issues and manual effort.
+                      </li>
+                      <li>
+                        Improved dashboard responsiveness through data modeling, schema refinement, and
+                        indexing strategies.
+                      </li>
+                    </ul>
+                    <div class="tags">
+                      <span class="tag">Tableau</span>
+                      <span class="tag">Excel</span>
+                      <span class="tag">Python</span>
+                      <span class="tag">SQL</span>
+                      <span class="tag">AWS Redshift</span>
+                      <span class="tag">Snowflake</span>
+                      <span class="tag">SQL Server</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            <div class="card">
+              <div class="section-title">Highlights</div>
+                <div class="scroll-area">
+                <div class="list">
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Dashboards</div>
+                    <div class="meta">Executive & operational reporting</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Executive reporting with KPI scorecards and drill-down analysis.</li>
+                    <li>Cross-functional dashboards supporting operations, sales, and finance.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Reporting Automation</div>
+                    <div class="meta">Efficiency & consistency</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Automated recurring reports using Python and Excel VBA.</li>
+                    <li>Standardized templates reducing manual effort and turnaround time.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">SQL Analytics</div>
+                    <div class="meta">Performance & reliability</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Complex joins, CTEs, and query optimization across enterprise databases.</li>
+                    <li>Support for compliance, finance, and ad-hoc analytical reporting.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Data Quality</div>
+                    <div class="meta">Accuracy & trust</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Data profiling, validation rules, and duplicate/null handling.</li>
+                    <li>Improved reporting accuracy and confidence in analytics outputs.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Pipelines</div>
+                    <div class="meta">ETL / ELT & integration</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>ETL/ELT workflows integrating multi-source data into Snowflake.</li>
+                    <li>Latency reduction and scalable analytics pipelines.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Cloud Analytics</div>
+                    <div class="meta">AWS & Snowflake</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Cloud-based analytics enabling scalable reporting solutions.</li>
+                    <li>Near real-time refreshes for timely business insights.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Modeling</div>
+                    <div class="meta">Forecasting & trends</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Forecasting and regression analysis using Python and R.</li>
+                    <li>Churn prediction and trend analysis to support planning.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Business Partnership</div>
+                    <div class="meta">Stakeholder collaboration</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>KPI definition through stakeholder workshops and alignment sessions.</li>
+                    <li>Translation of business requirements into analytics solutions.</li>
+                  </ul>
+                </div>
+
+                <div class="item">
+                  <div class="row">
+                    <div class="role-title">Performance Optimization</div>
+                    <div class="meta">Speed & usability</div>
+                  </div>
+                  <ul class="bullets">
+                    <li>Query tuning and data modeling to improve performance.</li>
+                    <li>Reduced dashboard load times and improved user experience.</li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+            </div>
+          </div>
+
+            <!-- PROJECTS -->
+            <div
+              class="panel"
+              id="panel-projects"
+              data-title="Projects"
+              data-subtitle="Selected work that demonstrates end-to-end impact."
+            >
+              <div class="card">
+                <div class="section-title">Featured projects</div>
+                <div class="list">
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Bitcoin Price ETL (Real-time)</div>
+                      <div class="meta">Python · PostgreSQL · Power BI</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>
+                        Automated collection of Bitcoin price data on a frequent schedule; persisted to
+                        CSV and loaded into PostgreSQL for reporting.
+                      </li>
+                      <li>Enabled near-real-time dashboards and trend monitoring in Power BI.</li>
+                    </ul>
+                    <div class="tags">
+                      <span class="tag">ETL</span>
+                      <span class="tag">Automation</span>
+                      <span class="tag">PostgreSQL</span>
+                      <span class="tag">Power BI</span>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">NASA Airfoil Noise Analytics</div>
+                      <div class="meta">Python · Power BI</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>
+                        Analyzed relationships between airfoil parameters and scaled sound pressure
+                        level.
+                      </li>
+                      <li>
+                        Built stakeholder-friendly visuals to explain the drivers of noise behavior and
+                        reduction.
+                      </li>
+                    </ul>
+                    <div class="tags">
+                      <span class="tag">EDA</span>
+                      <span class="tag">Visualization</span>
+                      <span class="tag">Storytelling</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-title">Links</div>
+                <p style="margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7">
+                  Add GitHub links, dashboard screenshots, and live demos here.
+                </p>
+              </div>
+            </div>
+
+            <!-- SKILLS -->
+            <div
+              class="panel"
+              id="panel-skills"
+              data-title="Skills"
+              data-subtitle="Tools and techniques used across analytics and data systems."
+            >
+              <div class="card">
+                <div class="section-title">Skill stack</div>
+                <div class="tags">
+                  <span class="tag">SQL (CTEs, Window Functions, Optimization)</span>
+                  <span class="tag">Python (Pandas, NumPy, Matplotlib, Scikit-learn)</span>
+                  <span class="tag">R (dplyr, ggplot2)</span>
+                  <span class="tag">Power BI (DAX, Power Query, KPI Scorecards)</span>
+                  <span class="tag">Tableau (Dashboards, LODs)</span>
+                  <span class="tag">Snowflake</span>
+                  <span class="tag">AWS (S3, Redshift, Glue, Lambda)</span>
+                  <span class="tag">Azure (ADF, Synapse, Databricks)</span>
+                  <span class="tag">Spark / PySpark</span>
+                  <span class="tag">Airflow (DAGs)</span>
+                  <span class="tag">SQL Server · PostgreSQL · Oracle</span>
+                </div>
+
+                <div style="height: 14px"></div>
+                <div class="section-title">Strength areas</div>
+                <div class="list">
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Analytics</div>
+                      <div class="meta">KPIs · insights · stakeholder storytelling</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>Executive-ready dashboards, consistent KPI definitions, and actionable insights.</li>
+                      <li>Statistical analysis, A/B testing, regression, and forecasting for decision support.</li>
+                    </ul>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Data engineering</div>
+                      <div class="meta">pipelines · quality · performance</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>ETL/ELT pipelines, validation frameworks, and automated reporting workflows.</li>
+                      <li>Performance-aware SQL, data modeling, indexing, and scalable warehouse patterns.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-title">Certifications</div>
+                <div class="tags">
+                  <span class="tag">PL-300 (Microsoft Power BI Data Analyst Associate)</span>
+                  <span class="tag">HIPAA - Accountable</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- EDUCATION -->
+            <div
+              class="panel"
+              id="panel-education"
+              data-title="Education"
+              data-subtitle="Academic background and credentials."
+            >
+              <div class="card">
+                <div class="section-title">Education</div>
+                <div class="list">
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">M.S. in Computer Science</div>
+                      <div class="meta">Rowan University · 08/2023 – 05/2025</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>Focus: data systems, analytics, and applied projects.</li>
+                    </ul>
+                  </div>
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">B.E. in Computer Science</div>
+                      <div class="meta">Sathyabama University · 06/2019 – 05/2023</div>
+                    </div>
+                    <ul class="bullets">
+                      <li>Built foundational skills in software, databases, and analytics.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-title">Focus areas</div>
+                <div class="kpi-grid">
+                  <div class="kpi">
+                    <div class="big">Warehousing</div>
+                    <div class="small">Snowflake · Redshift · SQL performance</div>
+                  </div>
+                  <div class="kpi">
+                    <div class="big">BI</div>
+                    <div class="small">Power BI · Tableau · KPI design</div>
+                  </div>
+                  <div class="kpi">
+                    <div class="big">Pipelines</div>
+                    <div class="small">ETL/ELT · automation · orchestration</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONTACT -->
+            <div
+              class="panel"
+              id="panel-contact"
+              data-title="Contact"
+              data-subtitle="Simple ways to connect."
+            >
+              <div class="card">
+                <div class="section-title">Contact</div>
+                <div class="list">
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Email</div>
+                      <div class="meta">
+                        <a id="emailLink2" href="mailto:anshu@careeremail.net">anshu@careeremail.net</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Phone</div>
+                      <div class="meta">(856) 526-0878</div>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">LinkedIn</div>
+                      <div class="meta">
+                        <a
+                          id="linkedinLink2"
+                          href="https://www.linkedin.com/in/pulipa"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          https://www.linkedin.com/in/pulipa
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="item">
+                    <div class="row">
+                      <div class="role-title">Resume</div>
+                      <div class="meta"><span id="resumeStatus">
+                        <a href="Resume.pdf" rel="noreferrer">
+                          Anshu Pulipati Resume</a></span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-title">One-line pitch</div>
+                <p style="margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7">
+                  Data Analyst specializing in SQL optimization, automated dashboards, and cloud 
+                  analytics to deliver faster reporting, higher data quality, and actionable business insights.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll(".nav button"));
+      const panels = Array.from(document.querySelectorAll(".panel"));
+      const panelTitle = document.getElementById("panelTitle");
+      const panelSubtitle = document.getElementById("panelSubtitle");
+
+      function setActive(target) {
+        buttons.forEach((b) =>
+          b.classList.toggle("active", b.dataset.target === target)
+        );
+        panels.forEach((p) =>
+          p.classList.toggle("active", p.id === `panel-${target}`)
+        );
+
+        const activePanel = document.getElementById(`panel-${target}`);
+        if (activePanel) {
+          panelTitle.textContent = activePanel.dataset.title || "Section";
+          panelSubtitle.textContent = activePanel.dataset.subtitle || "";
+        }
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("mouseenter", () => setActive(btn.dataset.target));
+        btn.addEventListener("click", () => setActive(btn.dataset.target));
+      });
+
+      const resumeBtn = document.getElementById("resumeBtn");
+
+      // ✅ paste your PUBLIC resume PDF URL here (Drive share link, Dropbox, etc.)
+      let resumeUrl = "https://example.com/anshu-pulipati-resume.pdf";
+
+      resumeBtn.addEventListener("click", () => {
+        if (!resumeUrl || resumeUrl.includes("example.com")) {
+          alert("Add your résumé link in the code: set resumeUrl to your PDF link.");
+          return;
+        }
+        window.open(resumeUrl, "_blank");
+      });
+
+      // Option A mobile support: tap to expand/collapse experience cards
+      (function initExperiencePeek() {
+        const peekItems = Array.from(document.querySelectorAll(".item.exp-peek"));
+
+        peekItems.forEach((card) => {
+          card.addEventListener("click", (e) => {
+            const target = e.target;
+            if (target && (target.tagName === "A" || target.closest("a"))) return;
+            card.classList.toggle("is-open");
+          });
+        });
+      })();
+
+      setActive("about");
+    </script>
+  </body>
+</html>
