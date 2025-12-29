@@ -1345,18 +1345,18 @@
         btn.addEventListener("click", () => setActive(btn.dataset.target));
       });
 
-      const resumeBtn = document.getElementById("resumeBtn");
+      // const resumeBtn = document.getElementById("resumeBtn");
 
-      // ✅ paste your PUBLIC resume PDF URL here (Drive share link, Dropbox, etc.)
-      let resumeUrl = "https://example.com/anshu-pulipati-resume.pdf";
+      // // ✅ paste your PUBLIC resume PDF URL here (Drive share link, Dropbox, etc.)
+      // let resumeUrl = "https://example.com/anshu-pulipati-resume.pdf";
 
-      resumeBtn.addEventListener("click", () => {
-        if (!resumeUrl || resumeUrl.includes("example.com")) {
-          alert("Add your résumé link in the code: set resumeUrl to your PDF link.");
-          return;
-        }
-        window.open(resumeUrl, "_blank");
-      });
+      // resumeBtn.addEventListener("click", () => {
+      //   if (!resumeUrl || resumeUrl.includes("example.com")) {
+      //     alert("Add your résumé link in the code: set resumeUrl to your PDF link.");
+      //     return;
+      //   }
+      //   window.open(resumeUrl, "_blank");
+      // });
 
       // Option A mobile support: tap to expand/collapse experience cards
       (function initExperiencePeek() {
@@ -1375,4 +1375,5 @@
     </script>
   </body>
 </html>
+
 
